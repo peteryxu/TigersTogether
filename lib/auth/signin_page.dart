@@ -8,6 +8,8 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import '../proconian/pages/home.dart';
+
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 /// Entrypoint example for various sign-in flows with Firebase.
@@ -773,15 +775,14 @@ class _OtherProvidersSignInSectionState
       print(user.photoURL);
 
       if (!userEmail.contains('chccs.k12.nc.us')) {
-        throw new Exception(
-            'Need to log in with school email: chccs.k12.nc.us');
+        //throw new Exception( 'Need to log in with school email: chccs.k12.nc.us');
       }
 
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("Sign In ${user.uid} with Google"),
       ));
 
-      // _pushPage(context, HomePage(user));
+      _pushPage(context, HomePage());
 
     } catch (e) {
       print(e);
