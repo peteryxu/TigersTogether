@@ -1,0 +1,26 @@
+name: TigersTogether
+description: Helping CHHS students, staff and teachers stay together during distance learning
+
+version: 1.0.6+7
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+ 
+  flutter_apns: ^1.1.0
+  flutter_local_notifications: ^1.4.3
+  stream_chat_flutter: ^0.2.8+3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test: any
+
+flutter:
+  uses-material-design: true
