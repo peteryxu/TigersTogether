@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>305946101891-aal3dac6l8hn8a9gr9odndnam6vm7fsq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.305946101891-aal3dac6l8hn8a9gr9odndnam6vm7fsq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCiNQ05u540lKX0itQSabP6QaPPPNtw4YY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>305946101891</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.wesense.proconian</string>
+	<key>PROJECT_ID</key>
+	<string>exalted-skein-274700</string>
+	<key>STORAGE_BUCKET</key>
+	<string>exalted-skein-274700.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:305946101891:ios:b4ba14adddb1547b9ab3b6</string>
+	<key>DATABASE_URL</key>
+	<string>https://exalted-skein-274700.firebaseio.com</string>
+</dict>
+</plist>
