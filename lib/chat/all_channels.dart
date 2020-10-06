@@ -85,8 +85,6 @@ void main() async {
     client.devToken('peteryxu2020'),
   );
 
-  print("########client fully initiated and connected");
-
   /*               
   await client.setUser(
     User(id: 'super-band-9'),
