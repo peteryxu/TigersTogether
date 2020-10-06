@@ -142,7 +142,7 @@ class FirebaseAuthService implements autha.AuthService {
 
       if (!userEmail.contains('chccs.k12.nc.us')) {
         print("need to sign out");
-        await signOut();
+        //await signOut();
         throw new Exception(
             'Need to log in with school email: chccs.k12.nc.us');
       } else {

@@ -13,11 +13,11 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
-  // Fix for: Unhandled Exception: ServicesBinding.defaultBinaryMessenger was accessed before the binding was initialized.
+  
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  
   final appleSignInAvailable = await AppleSignInAvailable.check();
+
   runApp(MyApp(appleSignInAvailable: appleSignInAvailable));
 }
 
