@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 //https://gist.github.com/Andrious?page=3
 
 /*
+gist code snippets
+
 By design, the State object’s constructor and initState() is not Ored again in such a sequence of events
 */
 

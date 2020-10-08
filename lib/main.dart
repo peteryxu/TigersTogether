@@ -13,13 +13,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import './splash/splash_app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final appleSignInAvailable = await AppleSignInAvailable.check();
 
-  runApp(MyApp(appleSignInAvailable: appleSignInAvailable));
+   void runMainApp() {
+   runApp(MyApp(appleSignInAvailable: appleSignInAvailable));
+}
+
+   runApp(
+    SplashApp(
+      key: UniqueKey(),
+      onInitializationComplete: () => runMainApp(),
+    ),
+  );
+  
 }
 
 class MyApp extends StatelessWidget {

@@ -140,6 +140,7 @@ class ChannelListPage extends StatelessWidget {
               '\$in': [StreamChat.of(context).user.id],
             }
           },
+          channelPreviewBuilder: _channelPreviewBuilder,
           sort: [SortOption('last_message_at')],
           pagination: PaginationParams(
             limit: 20,
@@ -147,6 +148,34 @@ class ChannelListPage extends StatelessWidget {
           channelWidget: ChannelPage(),
         ),
       ),
+    );
+  }
+
+  Widget _channelPreviewBuilder(BuildContext context, Channel channel) {
+    final lastMessage = channel.state.messages.reversed
+        .firstWhere((message) => !message.isDeleted);
+
+    final subtitle = (lastMessage == null ? "nothing yet" : lastMessage.text);
+    final opacity = channel.state.unreadCount > .0 ? 1.0 : 0.5;
+
+    return ListTile(
+      leading: ChannelImage(
+        channel: channel,
+      ),
+      title: ChannelName(
+        channel: channel,
+        textStyle:
+            StreamChatTheme.of(context).channelPreviewTheme.title.copyWith(
+                  color: Colors.black.withOpacity(opacity),
+                ),
+      ),
+      subtitle: Text(subtitle),
+      trailing: channel.state.unreadCount > 0
+          ? CircleAvatar(
+              radius: 10,
+              child: Text(channel.state.unreadCount.toString()),
+            )
+          : SizedBox(),
     );
   }
 }

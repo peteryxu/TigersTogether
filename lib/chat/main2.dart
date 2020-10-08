@@ -34,16 +34,18 @@ void main() async {
   };
 
   final user = User(
-    id: 'devwesense',
-    role: 'admin',
-    extraData: details,
+    id: 'peteryxu2020',
+    role: 'role',
+    //extraData: details,
   );
+
+  final token = client.devToken('peteryxu2020');
+  print("##################token is: " + token);
 
   await client.setUser(
     user,
-    client.devToken('devwesense'),
+    token,
   );
-
 
   /*
   var details = {
@@ -64,13 +66,13 @@ void main() async {
 
   //final channel = client.channel('messaging', id: 'messaging-channel1');
   final channel2 = client.channel('team', id: 'class-ap-language-art');
-  final channel3 = client.channel('team', id: 'class-american-history');
-  final channel4 = client.channel('team', id: 'class-ap-computer-science');
-  final channel5 = client.channel('team', id: 'club-stem');
-  final channel6 = client.channel('team', id: 'club-debate');
+  //final channel3 = client.channel('team', id: 'class-american-history');
+  //final channel4 = client.channel('team', id: 'class-ap-computer-science');
+  //final channel5 = client.channel('team', id: 'club-stem');
+  //final channel6 = client.channel('team', id: 'club-debate');
 
-  final channel7 = client.channel('livestream', id: 'Sports-Football Games');
-  final channel8 = client.channel('livestream', id: 'Sports-Basketball Games');
+  //final channel7 = client.channel('livestream', id: 'Sports-Football Games');
+  //final channel8 = client.channel('livestream', id: 'Sports-Basketball Games');
 
   // ignore: unawaited_futures
   channel2.watch();
