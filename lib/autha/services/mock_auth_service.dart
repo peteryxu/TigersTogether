@@ -5,6 +5,7 @@ import '../services/auth_service.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:random_string/random_string.dart' as random;
+import '../../models.dart';
 
 /// Mock authentication service to be used for testing the UI
 /// Keeps an in-memory store of registered accounts so that registration and sign in flows can be tested.
@@ -22,21 +23,21 @@ class MockAuthService implements AuthService {
 
   final Map<String, _UserData> _usersStore = <String, _UserData>{};
 
-  User _currentUser;
+  AppUser _currentUser;
 
-  final StreamController<User> _onAuthStateChangedController =
-      StreamController<User>();
+  final StreamController<AppUser> _onAuthStateChangedController =
+      StreamController<AppUser>();
   @override
-  Stream<User> get onAuthStateChanged => _onAuthStateChangedController.stream;
+  Stream<AppUser> get onAuthStateChanged => _onAuthStateChangedController.stream;
 
   @override
-  Future<User> currentUser() async {
+  Future<AppUser> currentUser() async {
     await Future<void>.delayed(startupTime);
     return _currentUser;
   }
 
   @override
-  Future<User> createUserWithEmailAndPassword(
+  Future<AppUser> createUserWithEmailAndPassword(
       String email, String password) async {
     await Future<void>.delayed(responseTime);
     if (_usersStore.keys.contains(email)) {
@@ -45,14 +46,14 @@ class MockAuthService implements AuthService {
         message: 'The email address is already registered. Sign in instead?',
       );
     }
-    final User user = User(uid: random.randomAlphaNumeric(32), email: email);
+    final AppUser user = AppUser(id: random.randomAlphaNumeric(32), email: email);
     _usersStore[email] = _UserData(password: password, user: user);
     _add(user);
     return user;
   }
 
   @override
-  Future<User> signInWithEmailAndPassword(String email, String password) async {
+  Future<AppUser> signInWithEmailAndPassword(String email, String password) async {
     await Future<void>.delayed(responseTime);
     if (!_usersStore.keys.contains(email)) {
       throw PlatformException(
@@ -75,9 +76,9 @@ class MockAuthService implements AuthService {
   Future<void> sendPasswordResetEmail(String email) async {}
 
   @override
-  Future<User> signInWithEmailAndLink({String email, String link}) async {
+  Future<AppUser> signInWithEmailAndLink({String email, String link}) async {
     await Future<void>.delayed(responseTime);
-    final User user = User(uid: random.randomAlphaNumeric(32));
+    final AppUser user = AppUser(id: random.randomAlphaNumeric(32));
     _add(user);
     return user;
   }
@@ -103,39 +104,39 @@ class MockAuthService implements AuthService {
     _add(null);
   }
 
-  void _add(User user) {
+  void _add(AppUser user) {
     _currentUser = user;
     _onAuthStateChangedController.add(user);
   }
 
   @override
-  Future<User> signInAnonymously() async {
+  Future<AppUser> signInAnonymously() async {
     await Future<void>.delayed(responseTime);
-    final User user = User(uid: random.randomAlphaNumeric(32));
+    final AppUser user = AppUser(id: random.randomAlphaNumeric(32));
     _add(user);
     return user;
   }
 
   @override
-  Future<User> signInWithFacebook() async {
+  Future<AppUser> signInWithFacebook() async {
     await Future<void>.delayed(responseTime);
-    final User user = User(uid: random.randomAlphaNumeric(32));
+    final AppUser user = AppUser(id: random.randomAlphaNumeric(32));
     _add(user);
     return user;
   }
 
   @override
-  Future<User> signInWithGoogle() async {
+  Future<AppUser> signInWithGoogle() async {
     await Future<void>.delayed(responseTime);
-    final User user = User(uid: random.randomAlphaNumeric(32));
+    final AppUser user = AppUser(id: random.randomAlphaNumeric(32));
     _add(user);
     return user;
   }
 
   @override
-  Future<User> signInWithApple({List<Scope> scopes}) async {
+  Future<AppUser> signInWithApple({List<Scope> scopes}) async {
     await Future<void>.delayed(responseTime);
-    final User user = User(uid: random.randomAlphaNumeric(32));
+    final AppUser user = AppUser(id: random.randomAlphaNumeric(32));
     _add(user);
     return user;
   }
@@ -149,5 +150,5 @@ class MockAuthService implements AuthService {
 class _UserData {
   _UserData({@required this.password, @required this.user});
   final String password;
-  final User user;
+  final AppUser user;
 }

@@ -52,5 +52,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location required to post </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location required to post</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to allow the user to take a photo to upload as a post</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to allow the user to select a photo to upload as a post</string>
 </dict>
 </plist>

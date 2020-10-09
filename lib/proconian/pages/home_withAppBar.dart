@@ -20,6 +20,7 @@ import '../../autha/common_widgets/platform_exception_alert_dialog.dart';
 import '../../autha/constants/keys.dart';
 import '../../autha/constants/strings.dart';
 import '../../chat/all_channels.dart';
+import '../../models.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -78,7 +79,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     //final themeChanger = Provider.of<ThemeChanger>(context);
 
-    final user = Provider.of<autha.User>(context);
+    final user = Provider.of<AppUser>(context);
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,

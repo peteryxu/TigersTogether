@@ -1,42 +1,49 @@
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../services/auth_service.dart' as autha;
+import 'package:flutter/material.dart';
+import '../services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+//import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../models.dart';
 
-class FirebaseAuthService implements autha.AuthService {
+class FirebaseAuthService implements AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  autha.User _userFromFirebase(User user) {
+  final fireStore = FirebaseFirestore.instance;
+  
+//final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  AppUser _userFromFirebase(User user) {
     if (user == null) {
       return null;
     }
-    return autha.User(
-      uid: user.uid,
+    return AppUser(
+      id: user.uid,
       email: user.email,
       displayName: user.displayName,
-      photoUrl: user.photoUrl,
+      photoUrl: user.photoURL,
     );
   }
 
   @override
-  Stream<autha.User> get onAuthStateChanged {
-    return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
+  Stream<AppUser> get onAuthStateChanged {
+    return _firebaseAuth.authStateChanges().map(_userFromFirebase);
   }
 
   @override
-  Future<autha.User> signInAnonymously() async {
+  Future<AppUser> signInAnonymously() async {
     final UserCredential authResult = await _firebaseAuth.signInAnonymously();
     return _userFromFirebase(authResult.user);
   }
 
   @override
-  Future<autha.User> signInWithEmailAndPassword(
+  Future<AppUser> signInWithEmailAndPassword(
       String email, String password) async {
-    final UserCredential authResult = await _firebaseAuth
-        .signInWithCredential(EmailAuthProvider.getCredential(
+    final UserCredential authResult =
+        await _firebaseAuth.signInWithCredential(EmailAuthProvider.credential(
       email: email,
       password: password,
     ));
@@ -44,7 +51,7 @@ class FirebaseAuthService implements autha.AuthService {
   }
 
   @override
-  Future<autha.User> createUserWithEmailAndPassword(
+  Future<AppUser> createUserWithEmailAndPassword(
       String email, String password) async {
     final UserCredential authResult = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -57,7 +64,7 @@ class FirebaseAuthService implements autha.AuthService {
   }
 
   @override
-  Future<autha.User> signInWithEmailAndLink({String email, String link}) async {
+  Future<AppUser> signInWithEmailAndLink({String email, String link}) async {
     final UserCredential authResult =
         await _firebaseAuth.signInWithEmailLink(email: email, emailLink: link);
     return _userFromFirebase(authResult.user);
@@ -65,7 +72,7 @@ class FirebaseAuthService implements autha.AuthService {
 
   @override
   Future<bool> isSignInWithEmailLink(String link) async {
-    return await _firebaseAuth.isSignInWithEmailLink(link);
+    return _firebaseAuth.isSignInWithEmailLink(link);
   }
 
   @override
@@ -94,8 +101,7 @@ class FirebaseAuthService implements autha.AuthService {
     */
   }
 
-  @override
-  Future<autha.User> signInWithGoogle_old() async {
+  Future<AppUser> signInWithGoogleOld() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount googleUser = await googleSignIn.signIn();
 
@@ -104,7 +110,7 @@ class FirebaseAuthService implements autha.AuthService {
           await googleUser.authentication;
       if (googleAuth.accessToken != null && googleAuth.idToken != null) {
         final UserCredential authResult = await _firebaseAuth
-            .signInWithCredential(GoogleAuthProvider.getCredential(
+            .signInWithCredential(GoogleAuthProvider.credential(
           idToken: googleAuth.idToken,
           accessToken: googleAuth.accessToken,
         ));
@@ -120,52 +126,102 @@ class FirebaseAuthService implements autha.AuthService {
     }
   }
 
-  Future<autha.User> signInWithGoogle() async {
+  Future<AppUser> signInWithGoogle() async {
     try {
       UserCredential userCredential;
 
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
+
       final GoogleAuthCredential googleAuthCredential =
           GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+
       userCredential =
           await _firebaseAuth.signInWithCredential(googleAuthCredential);
-      final user = userCredential.user;
-      final userEmail = user.email;
-      print(userEmail);
-      print(user.displayName);
-      print(user.photoURL);
 
-      if (!userEmail.contains('chccs.k12.nc.us')) {
-        print("need to sign out");
+      final fbAuthUser = userCredential.user;
+
+      final id = fbAuthUser.uid;
+      final email = fbAuthUser.email;
+      //final displayName = fbAuthUser.displayName;
+      //final photoURL = fbAuthUser.photoURL;
+
+      print("######FirebaseAuth: Google SignIn Data: uid: " + id);
+      print("######FirebaseAuth: Google SignIn Data: email: " + email);
+      //print("######FirebaseAuth: Google SignIn Data: displayName: " + displayName);
+      //print("######FirebaseAuth: Google SignIn Data: photoURL: " + photoURL);
+
+      // retrict LOG IN to only school district
+      if (!email.contains('chccs.k12.nc.us')) {
+        print("##### This email is NOT part of chapel hill school district");
         //await signOut();
-        throw new Exception(
-            'Need to log in with school email: chccs.k12.nc.us');
+        //throw new Exception('Need to log in with school email: chccs.k12.nc.us');
       } else {
-        return _userFromFirebase(userCredential.user);
+        //try to create User Profile in the firestore
+        print("##### This email is  part of chapel hill school district");
       }
+
+      //final user = await tryCreateUserRecordInFirestore(fbAuthUser);
+      // return user;
+      final usersRef = fireStore.collection('insta_users');
+
+      DocumentSnapshot userDocSnapshot = await usersRef.doc(fbAuthUser.uid).get();
+      
+      print("##### Got userDocSnapshot");
+
+      // no user record exists, time to create
+      if (!userDocSnapshot.exists) {
+        print("###### Firestore: creating new user  profile");
+
+        final id = fbAuthUser.uid;
+        final email = fbAuthUser.email;
+        final displayName = fbAuthUser.displayName;
+        final photoURL = fbAuthUser.photoURL;
+
+        await usersRef.doc(id).set({
+          "id": id,
+          "username": "",
+          "photoUrl": "",
+          "email": email,
+          "displayName": "",
+          "bio": "",
+          "followers": {},
+          "following": {},
+        });
+
+        userDocSnapshot = await usersRef.doc(id).get();
+        print("######Firestore: created new user  profile");
+      }
+
+      final userProfile = AppUser.fromDocument(userDocSnapshot.data());
+
+      print("######Firestore: retrieved user profile " + userProfile.id);
+
+      return userProfile;
     } catch (e) {
       print(e);
       rethrow;
     }
   }
 
+  
   @override
-  Future<autha.User> signInWithFacebook() async {
+  Future<AppUser> signInWithFacebook() async {
     return null;
   }
 
   @override
-  Future<autha.User> signInWithApple({List<Scope> scopes = const []}) async {
+  Future<AppUser> signInWithApple({List<Scope> scopes = const []}) async {
     return null;
   }
 
   @override
-  Future<autha.User> currentUser() async {
+  Future<AppUser> currentUser() async {
     final User user = _firebaseAuth.currentUser;
     return _userFromFirebase(user);
   }

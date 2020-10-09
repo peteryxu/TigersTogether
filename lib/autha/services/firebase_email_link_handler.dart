@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import '../../models.dart';
 
 enum EmailLinkErrorType {
   linkError,
@@ -117,7 +118,7 @@ class FirebaseEmailLinkHandler {
     try {
       isLoading.value = true;
       // check that user is not signed in
-      final User user = await auth.currentUser();
+      final AppUser user = await auth.currentUser();
       if (user != null) {
         _errorController.add(EmailLinkError(
           error: EmailLinkErrorType.userAlreadySignedIn,

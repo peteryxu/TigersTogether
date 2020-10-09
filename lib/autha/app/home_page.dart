@@ -9,6 +9,7 @@ import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import '../../models.dart';
 
 class HomePage extends StatelessWidget {
   
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<AppUser>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.homePage),
@@ -63,7 +64,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildUserInfo(User user) {
+  Widget _buildUserInfo(AppUser user) {
     return Column(
       children: [
         Avatar(

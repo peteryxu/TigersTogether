@@ -31,7 +31,7 @@ class SignInPageBuilder extends StatelessWidget {
             builder: (_, SignInManager manager, __) => SignInPage._(
               isLoading: isLoading.value,
               manager: manager,
-              title: 'Firebase Auth Demo',
+              title: 'SignIn',
             ),
           ),
         ),
@@ -78,6 +78,13 @@ class SignInPage extends StatelessWidget {
       }
     }
   }
+
+   
+
+
+
+
+
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {

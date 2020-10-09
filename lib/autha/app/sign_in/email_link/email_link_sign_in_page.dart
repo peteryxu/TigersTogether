@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import '../../../../models.dart';
 
 class EmailLinkSignInPage extends StatefulWidget {
   const EmailLinkSignInPage({
@@ -54,7 +55,7 @@ class _EmailLinkSignInPageState extends State<EmailLinkSignInPage> {
 
   final TextEditingController _emailController = TextEditingController();
 
-  StreamSubscription<User> _onAuthStateChangedSubscription;
+  StreamSubscription<AppUser> _onAuthStateChangedSubscription;
   @override
   void initState() {
     super.initState();
@@ -65,7 +66,7 @@ class _EmailLinkSignInPageState extends State<EmailLinkSignInPage> {
     });
     // Invoke onSignedIn callback if a non-null user is detected
     _onAuthStateChangedSubscription =
-        widget.authService.onAuthStateChanged.listen((User user) {
+        widget.authService.onAuthStateChanged.listen((AppUser user) {
       if (user != null) {
         if (widget.onSignedIn != null && mounted) {
           widget.onSignedIn();

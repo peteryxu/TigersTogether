@@ -13,6 +13,7 @@ import '../config.dart';
 import '../tabs/categories_tab.dart';
 import '../tabs/proconian_tab.dart';
 import '../tabs/chat_tab.dart';
+import '../../insta/insta_tab.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/services.dart';
 
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> {
           ProconianTab(),
           CategoriesTab(),
           ChatTab(),
+          InstaTab(),
         ],
       ),
       bottomNavigationBar: ConvexAppBar(

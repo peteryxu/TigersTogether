@@ -5,6 +5,8 @@ import '../services/auth_service.dart';
 import '../services/firebase_auth_service.dart';
 import '../services/mock_auth_service.dart';
 import 'package:flutter/foundation.dart';
+import '../../models.dart';
+
 
 enum AuthServiceType { firebase, mock }
 
@@ -24,14 +26,14 @@ class AuthServiceAdapter implements AuthService {
       ? _firebaseAuthService
       : _mockAuthService;
 
-  StreamSubscription<User> _firebaseAuthSubscription;
-  StreamSubscription<User> _mockAuthSubscription;
+  StreamSubscription<AppUser> _firebaseAuthSubscription;
+  StreamSubscription<AppUser> _mockAuthSubscription;
 
   void _setup() {
     // Observable<User>.merge was considered here, but we need more fine grained control to ensure
     // that only events from the currently active service are processed
     _firebaseAuthSubscription =
-        _firebaseAuthService.onAuthStateChanged.listen((User user) {
+        _firebaseAuthService.onAuthStateChanged.listen((user) {
       if (authServiceType == AuthServiceType.firebase) {
         _onAuthStateChangedController.add(user);
       }
@@ -41,7 +43,7 @@ class AuthServiceAdapter implements AuthService {
       }
     });
     _mockAuthSubscription =
-        _mockAuthService.onAuthStateChanged.listen((User user) {
+        _mockAuthService.onAuthStateChanged.listen((user) {
       if (authServiceType == AuthServiceType.mock) {
         _onAuthStateChangedController.add(user);
       }
@@ -61,23 +63,23 @@ class AuthServiceAdapter implements AuthService {
     authServiceTypeNotifier.dispose();
   }
 
-  final StreamController<User> _onAuthStateChangedController =
-      StreamController<User>.broadcast();
+  final StreamController<AppUser> _onAuthStateChangedController =
+      StreamController<AppUser>.broadcast();
   @override
-  Stream<User> get onAuthStateChanged => _onAuthStateChangedController.stream;
+  Stream<AppUser> get onAuthStateChanged => _onAuthStateChangedController.stream;
 
   @override
-  Future<User> currentUser() => authService.currentUser();
+  Future<AppUser> currentUser() => authService.currentUser();
 
   @override
-  Future<User> signInAnonymously() => authService.signInAnonymously();
+  Future<AppUser> signInAnonymously() => authService.signInAnonymously();
 
   @override
-  Future<User> createUserWithEmailAndPassword(String email, String password) =>
+  Future<AppUser> createUserWithEmailAndPassword(String email, String password) =>
       authService.createUserWithEmailAndPassword(email, password);
 
   @override
-  Future<User> signInWithEmailAndPassword(String email, String password) =>
+  Future<AppUser> signInWithEmailAndPassword(String email, String password) =>
       authService.signInWithEmailAndPassword(email, password);
 
   @override
@@ -85,7 +87,7 @@ class AuthServiceAdapter implements AuthService {
       authService.sendPasswordResetEmail(email);
 
   @override
-  Future<User> signInWithEmailAndLink({String email, String link}) =>
+  Future<AppUser> signInWithEmailAndLink({String email, String link}) =>
       authService.signInWithEmailAndLink(email: email, link: link);
 
   @override
@@ -113,13 +115,13 @@ class AuthServiceAdapter implements AuthService {
       );
 
   @override
-  Future<User> signInWithFacebook() => authService.signInWithFacebook();
+  Future<AppUser> signInWithFacebook() => authService.signInWithFacebook();
 
   @override
-  Future<User> signInWithGoogle() => authService.signInWithGoogle();
+  Future<AppUser> signInWithGoogle() => authService.signInWithGoogle();
 
   @override
-  Future<User> signInWithApple({List<Scope> scopes}) =>
+  Future<AppUser> signInWithApple({List<Scope> scopes}) =>
       authService.signInWithApple();
 
   @override

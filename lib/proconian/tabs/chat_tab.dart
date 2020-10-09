@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../../chat/all_channels.dart';
-import '../../autha/services/auth_service.dart' as autha;
+import '../../autha/services/auth_service.dart';
+import '../../models.dart';
 
 class ChatTab extends StatefulWidget {
   ChatTab({Key key}) : super(key: key);
@@ -51,7 +52,7 @@ to rebuild the widgets
     print(
         "######ChatTab init StreamChatClient using logged in useremail as id.");
 
-    final user = Provider.of<autha.User>(context);
+    final user = Provider.of<AppUser>(context);
     final userEmail = user.email;
     print("#######ChatTab " + userEmail);
 

@@ -4,6 +4,7 @@ import '../../proconian/pages/home.dart';
 import '../app/sign_in/sign_in_page.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
+import '../../models.dart';
 
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
@@ -11,7 +12,7 @@ import 'package:flutter/material.dart';
 /// Note: this class used to be called [LandingPage].
 class AuthWidget extends StatelessWidget {
   const AuthWidget({Key key, @required this.userSnapshot}) : super(key: key);
-  final AsyncSnapshot<User> userSnapshot;
+  final AsyncSnapshot<AppUser> userSnapshot;
 
   @override
   Widget build(BuildContext context) {

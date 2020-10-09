@@ -11,11 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../models.dart';
 
 Future<void> main() async {
   
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  
   final appleSignInAvailable = await AppleSignInAvailable.check();
 
   runApp(MyApp(appleSignInAvailable: appleSignInAvailable));
@@ -57,7 +59,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: AuthWidgetBuilder(
-          builder: (BuildContext context, AsyncSnapshot<User> userSnapshot) {
+          builder: (BuildContext context, AsyncSnapshot<AppUser> userSnapshot) {
         return MaterialApp(
           theme: ThemeData(primarySwatch: Colors.indigo),
           home: EmailLinkErrorPresenter.create(
